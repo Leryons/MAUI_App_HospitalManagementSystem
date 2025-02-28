@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:HospitalManagementSystem.ViewModel"
+             x:DataType="viewmodel:DataViewModel"
              x:Class="HospitalManagementSystem.View.SignUpPage"
              Title="Sing Up">
 
@@ -78,7 +80,8 @@
                                         WidthRequest="120">
                             
                             <RoundRectangle.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="SelectUserTypeButton"/>
+                                <TapGestureRecognizer Tapped="SelectUserTypeButton"
+                                                      Command="{Binding IsDoctorCommand}"/>
                             </RoundRectangle.GestureRecognizers>
                             
                         </RoundRectangle>
@@ -91,7 +94,8 @@
                                         WidthRequest="120">
                             
                             <RoundRectangle.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="SelectUserTypeButton"/>
+                                <TapGestureRecognizer Tapped="SelectUserTypeButton"
+                                                      Command="{Binding IsRecepcionistCommand}"/>
                             </RoundRectangle.GestureRecognizers>
                             
                         </RoundRectangle>
@@ -104,26 +108,31 @@
                                        HorizontalOptions="Center">
                     
                     <Entry Placeholder="First Name"
+                           Text="{Binding FirstName}"
                            WidthRequest="125"/>
 
-                    <Entry Placeholder="Last Name"/>
+                    <Entry Placeholder="Last Name"
+                           Text="{Binding LastName}"/>
 
                 </HorizontalStackLayout>
 
                 <Entry Placeholder="Password" 
+                       Text="{Binding Password}"
                        IsPassword="True"
                        Grid.Row="4"/>
 
                 <Entry Placeholder="Email"
+                       Text="{Binding Email}"
                        Grid.Row="5"/>
 
                 <Entry Placeholder="Phone" 
+                       Text="{Binding Phone}"
                        Keyboard="Numeric"
                        Grid.Row="6"/>
 
                 <Button x:Name="SignUpButton"
                         Text="Sign Up"
-                        Clicked="SelectUserTypeButton"
+                        Clicked="SignUpButton_Clicked"
                         Grid.Row="9"
                         Margin="10"/>
 

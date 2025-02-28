@@ -1,10 +1,10 @@
 namespace HospitalManagementSystem.View;
 
-public partial class SearchPage: ContentPage
+public partial class SearchPage : ContentPage
 {
-	public SearchPage(DataViewModel viewModel)
-	{
-		InitializeComponent();
+    public SearchPage(DataViewModel viewModel)
+    {
+        InitializeComponent();
         this.BindingContext = viewModel;
     }
 

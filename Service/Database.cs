@@ -8,7 +8,8 @@ public class Database
     {
         try
         {
-            sQLite = new SQLiteConnection("UmbrellaCorp.db");
+            var dbPath = Path.Combine(FileSystem.AppDataDirectory, "UmbrellaCorp.db");
+            sQLite = new SQLiteConnection(dbPath);
             sQLite.CreateTable<User>();
             sQLite.CreateTable<Doctor>();
             sQLite.CreateTable<Patient>();
@@ -50,15 +51,34 @@ public class Database
 
     public bool RegisterDoctorAsync(Doctor doctor)
     {
-        sQLite?.Insert(doctor);
-
         var doctorExist = sQLite?.Table<Doctor>().Where(d => d.Name == doctor.Name && d.LastName == doctor.LastName)
                                                  .FirstOrDefault();
 
-        Debug.WriteLine($"El Doctor {doctorExist.Name} ha sido registrado y se encuentra en la Base de datos.");
 
-        if(doctorExist != null)
+
+        if (doctorExist == null)
+        {
+            sQLite?.Insert(doctor);
+            Debug.WriteLine($"Doctor {doctor.Name} has been registered in the database with the access level: {doctor.Rol}.");
+
             return true;
+        }
+
+        return false;
+    }
+
+    public bool RegisterRecepcionistAsync(Recepcionist recepcionist)
+    {
+        var recepcionistExist = sQLite?.Table<Doctor>().Where(r => r.Name == recepcionist.Name && r.LastName == recepcionist.LastName)
+                                                       .FirstOrDefault();
+
+        if (recepcionistExist == null)
+        {
+            sQLite?.Insert(recepcionist);
+            Debug.WriteLine($"Recepcionist {recepcionist.Name} has been registered in the database with the access level: {recepcionist.Rol}.");
+
+            return true;
+        }
 
         return false;
     }

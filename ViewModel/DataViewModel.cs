@@ -16,14 +16,14 @@ public partial class DataViewModel : ObservableObject
 
     public bool AccessLevelConfirmation() //Method to confirm access level
     {
-        if(CurrentUser.Rol.Equals("Doctor"))
+        if (CurrentUser.Rol.Equals("Doctor"))
         {
             return true;
         }
 
         return false;
     }
-    
+
 
     //User ViewModel
 
@@ -33,16 +33,19 @@ public partial class DataViewModel : ObservableObject
 
     //User prop
     [ObservableProperty]
-    private string _firstName; 
-    
-    [ObservableProperty]
-    private string _lastName;  
+    private string _firstName;
 
     [ObservableProperty]
-    private string _phone;  
+    private string _lastName;
 
     [ObservableProperty]
-    private string _email;  
+    private string _rol;
+
+    [ObservableProperty]
+    private string _phone;
+
+    [ObservableProperty]
+    private string _email;
 
     [ObservableProperty]
     private string _password;
@@ -50,8 +53,8 @@ public partial class DataViewModel : ObservableObject
 
     //Doctor prop
     [ObservableProperty]
-    private string _specialization; 
-    
+    private string _specialization;
+
     [ObservableProperty]
     private string _department;
 
@@ -59,7 +62,7 @@ public partial class DataViewModel : ObservableObject
     //Patient prop
     [ObservableProperty]
     private string _medicalRecord;
-    
+
 
     public async Task LoginUserAsync()
     {
@@ -67,10 +70,10 @@ public partial class DataViewModel : ObservableObject
         {
             CurrentUser = await database.LoginUserAsync(Email, Password);
 
-            Debug.WriteLine(CurrentUser.Name, CurrentUser.Email);
-
             if (CurrentUser != null)
             {
+                Debug.WriteLine($"User {CurrentUser.Name} is logging up. Level Acces is {CurrentUser.Rol}.");
+
                 switch (CurrentUser.Rol)
                 {
                     case "Doctor":
@@ -86,7 +89,7 @@ public partial class DataViewModel : ObservableObject
                         break;
                 }
             }
-            else 
+            else
             {
                 await Shell.Current.DisplayAlert("Error", "Invalid credentials", "Ok");
             }
@@ -105,6 +108,7 @@ public partial class DataViewModel : ObservableObject
             {
                 Name = _firstName,
                 LastName = _lastName,
+                Rol = _rol,
                 Phone = _phone,
                 Email = _email,
                 Password = _password,
@@ -128,5 +132,51 @@ public partial class DataViewModel : ObservableObject
         {
             Debug.WriteLine(ex);
         }
+    }
+
+    public async Task RegisterRecepcionistAsync()
+    {
+        try
+        {
+            Recepcionist recepcionist = new Recepcionist
+            {
+                Name = _firstName,
+                LastName = _lastName,
+                Rol = _rol,
+                Phone = _phone,
+                Email = _email,
+                Password = _password
+            };
+
+            var confirmInsert = database.RegisterRecepcionistAsync(recepcionist);
+
+            if (confirmInsert)
+            {
+                Shell.Current.DisplayAlert("Ok", "Successfully registered", "Next");
+                Shell.Current.GoToAsync("LoginPage");
+            }
+            else
+            {
+                Shell.Current.DisplayAlert("Error", "Error, invalid user", "Accept");
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    [RelayCommand]
+    public void IsDoctor()
+    {
+        Rol = nameof(Doctor);
+        Debug.WriteLine(Rol);
+    }
+
+    [RelayCommand]
+    public void IsRecepcionist()
+    {
+        Rol = nameof(Recepcionist);
+        Debug.WriteLine(Rol);
     }
 }

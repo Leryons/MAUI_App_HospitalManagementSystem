@@ -2,17 +2,18 @@ namespace HospitalManagementSystem.View;
 
 public partial class SignUpPage : ContentPage
 {
-    public SignUpPage()
+    public SignUpPage(DataViewModel viewModel)
     {
         InitializeComponent();
+        this.BindingContext = viewModel;
     }
 
-    Entry Specialization = new Entry
+    Entry Specialization = new()
     {
         Placeholder = "Specialization"
     };
 
-    Entry Department = new Entry
+    Entry Department = new()
     {
         Placeholder = "Department"
     };
@@ -29,7 +30,7 @@ public partial class SignUpPage : ContentPage
                 DoctorSelectorLabel.TextColor = Color.FromRgb(255, 255, 255);
                 RecepcionistSelectorLabel.TextColor = Color.FromRgb(0, 0, 0);
 
-                DoctorSelector.InvalidateMeasure(); 
+                DoctorSelector.InvalidateMeasure();
                 RecepcionistSelector.InvalidateMeasure();
 
                 Grid.SetRow(Specialization, 7);
@@ -53,15 +54,33 @@ public partial class SignUpPage : ContentPage
 
                 SignUpGrid.Children.Remove(Specialization);
                 SignUpGrid.Children.Remove(Department);
+
             }
 
-            if (sender == SignUpButton)
-            {
-                Specialization.SetBinding(Entry.TextProperty, "Specialization");
-                Department.SetBinding(Entry.TextProperty, "Department");
 
-                await ((DataViewModel)BindingContext).RegisterDoctorAsync();
-            }
         });
+    }
+
+    private void SignUpButton_Clicked(object sender, EventArgs e)
+    {
+
+        var user = ((DataViewModel)BindingContext);
+
+        if (user.Rol.Equals(nameof(Doctor)))
+        {
+            Debug.WriteLine("DoctorSelector Has been pressed and try to sign");
+
+            Specialization.SetBinding(Entry.TextProperty, "Specialization");
+            Department.SetBinding(Entry.TextProperty, "Department");
+
+            ((DataViewModel)BindingContext).RegisterDoctorAsync();
+        }
+
+        if (user.Rol.Equals(nameof(Recepcionist)))
+        {
+            Debug.WriteLine("RecepcionistSelector Has been pressed and try to sign");
+
+            ((DataViewModel)BindingContext).RegisterRecepcionistAsync();
+        }
     }
 }
