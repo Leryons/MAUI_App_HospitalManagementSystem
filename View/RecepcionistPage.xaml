@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:model ="clr-namespace:HospitalManagementSystem.Model"
+             x:Class="HospitalManagementSystem.View.RecepcionistPage"
+             x:DataType="model:Recepcionist"
+             Title="{Binding Path=Name, StringFormat='Hola, {0}'}">
+
+    <ContentPage.Resources>
+
+        <!-- Generic Style for Frames -->
+        <Style TargetType="Border">
+            <Setter Property="StrokeShape" Value="RoundRectangle 10,10,10,10"/>
+            <Setter Property="WidthRequest" Value="100"/>
+            <Setter Property="HeightRequest" Value="100"/>
+            <Setter Property="BackgroundColor" Value="White"/>
+            <Setter Property="Opacity" Value="0.7"/>
+            <Setter Property="Stroke" Value="White"/>
+        </Style>
+
+        <!-- Generic Style for Icons Stack -->
+        <Style TargetType="VerticalStackLayout">
+            <Setter Property="HorizontalOptions" Value="Center"/>
+            <Setter Property="Spacing" Value="10"/>
+        </Style>
+
+        <!-- Generic Style for all labels -->
+        <Style TargetType="Label">
+            <Setter Property="TextColor" Value="White"/>
+            <Setter Property="Opacity" Value="0.7"/>
+            <Setter Property="HorizontalOptions" Value="Center"/>
+        </Style>
+    </ContentPage.Resources>
+    
+    
+        <Grid RowDefinitions="auto,auto,auto"
+              VerticalOptions="Center"
+              HorizontalOptions="Center">
+
+        <Image Source="recepcionistpage_background.jpg"
+               Aspect="Center"
+               Grid.RowSpan="3"/>
+
+        <VerticalStackLayout Grid.Row="0">
+
+            <Border>
+
+                <ImageButton Source="doctor_icon.png"/>
+
+            </Border>
+
+            <Label Text="Search a Doctor"/>
+
+        </VerticalStackLayout>
+
+        <VerticalStackLayout Grid.Row="1">
+
+            <Border>
+
+                <ImageButton Source="doctor_icon.png"/>
+
+            </Border>
+
+            <Label Text="Search a Patient"/>
+
+        </VerticalStackLayout>
+
+        <VerticalStackLayout Grid.Row="2">
+
+            <Border>
+
+                <ImageButton Source="doctor_icon.png"/>
+
+            </Border>
+
+            <Label Text="Add a Patient"/>
+
+        </VerticalStackLayout>
+
+
+    </Grid>
+    
+</ContentPage>

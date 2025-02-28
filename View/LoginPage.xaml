@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:HospitalManagementSystem.ViewModel"
+             x:DataType="viewmodel:DataViewModel"
+             x:Class="HospitalManagementSystem.View.LoginPage"
+             Title="Login">
+    
+    
+    <Grid RowDefinitions="*,auto,*,*"
+          Padding="10">
+
+        <Image Source="umbrella_corp.png"
+               Aspect="Center"
+               Grid.Row="0"
+               Grid.RowSpan="5"/>
+
+        <!-- EasterEgg -->
+        <ImageButton Source="umbrella_textless_logo.png"
+                     Opacity="0.7"
+                     Clicked="PlayMusic"
+                     WidthRequest="100"
+                     HeightRequest="100"
+                     HorizontalOptions="Start"
+                     VerticalOptions="End"
+                     Grid.Row="3">
+
+
+        </ImageButton>
+
+        <Border StrokeShape="RoundRectangle 10,10,10,10"
+                BackgroundColor="White"
+                Opacity="0.7"
+                Grid.Row="1"
+                WidthRequest="280">
+
+
+            <StackLayout Spacing="15">
+                
+                <Entry Placeholder="Email"
+                       Text="{Binding Email}"/>
+
+                <Entry Placeholder="Password" 
+                       Text="{Binding Password}"
+                       IsPassword="True"/>
+
+
+                <HorizontalStackLayout HorizontalOptions="Center"
+                                       Spacing="10"
+                                       Padding="0,15,0,0">
+
+                    <Button x:Name="LoginButton"
+                            Text="Login"
+                            Clicked="SectionButton_Clicked"/>
+
+                    <Button x:Name="SignUpButton"
+                            Text="SignUp"
+                            Clicked="SectionButton_Clicked"/>
+
+                </HorizontalStackLayout>
+
+
+                <Label Text="* All that is happening in the city is none of our business."
+                       TextColor="Black"
+                       Opacity="0.5"
+                       FontSize="Micro"
+                       Padding="10"
+                       HorizontalTextAlignment="Center"/>
+
+            </StackLayout>
+
+        </Border>
+
+    </Grid>
+    
+    
+    
+</ContentPage>

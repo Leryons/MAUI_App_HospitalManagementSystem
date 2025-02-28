@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HospitalManagementSystem.View.SignUpPage"
+             Title="Sing Up">
+
+    <Grid RowDefinitions="40,auto,*,*"
+          Padding="10">
+
+        <Image Source="umbrella_corp.png"
+               Aspect="Center"
+               Grid.Row="0"
+               Grid.RowSpan="5"/>
+
+        <Image Source="umbrella_textless_logo.png"
+               Opacity="0.7"
+               WidthRequest="100"
+               HeightRequest="100"
+               HorizontalOptions="Start"
+               VerticalOptions="End"
+               Grid.Row="3" />
+
+
+        <Border StrokeShape="RoundRectangle 10,10,10,10"
+                BackgroundColor="White"
+                Opacity="0.7"
+                Grid.Row="1"
+                WidthRequest="280">
+
+            <Grid x:Name="SignUpGrid"
+                  RowDefinitions="Auto,Auto,*,*,*,*,*,*,*,*"
+                  Margin="10">
+
+                <Label Text="UMBRELLA"
+                       FontSize="Title"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       Grid.Row="0"
+                       Margin="0,10,0,0"/>
+                
+                <Label Text="Corporation"
+                       FontSize="Caption"
+                       HorizontalOptions="Center"
+                       Grid.Row="1"
+                       Margin="0,0,0,10"/>
+
+                <Grid ColumnDefinitions="*,*"
+                      Grid.Row="2"
+                      Margin="0,10,0,0"
+                      Opacity="0.9">
+
+                    <Label x:Name="DoctorSelectorLabel"
+                           Text="Doctor"
+                           TextColor="Black"
+                           FontSize="15"
+                           HorizontalTextAlignment="Center"
+                           Grid.Column="0"
+                           Padding="10"/>
+
+                    <Label x:Name="RecepcionistSelectorLabel"
+                           Text="Recepcionist"
+                           TextColor="Black"
+                           FontSize="15"
+                           HorizontalTextAlignment="Center"
+                           Grid.Column="1"
+                           Padding="5,10,20,0"/>
+
+                    <HorizontalStackLayout Grid.Column="0"
+                                           Grid.ColumnSpan="2"
+                                           HorizontalOptions="Center"
+                                           ZIndex="-1">
+
+                        <RoundRectangle x:Name="DoctorSelector"
+                                        CornerRadius="80,0,0,0"
+                                        BackgroundColor="Transparent"
+                                        Stroke="#E31E25"
+                                        HeightRequest="25"
+                                        WidthRequest="120">
+                            
+                            <RoundRectangle.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="SelectUserTypeButton"/>
+                            </RoundRectangle.GestureRecognizers>
+                            
+                        </RoundRectangle>
+
+                        <RoundRectangle x:Name="RecepcionistSelector" 
+                                        CornerRadius="0,0,0,80"
+                                        Stroke="#E31E25"
+                                        BackgroundColor="Transparent"
+                                        HeightRequest="25"
+                                        WidthRequest="120">
+                            
+                            <RoundRectangle.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="SelectUserTypeButton"/>
+                            </RoundRectangle.GestureRecognizers>
+                            
+                        </RoundRectangle>
+
+                    </HorizontalStackLayout>
+
+                </Grid>
+
+                <HorizontalStackLayout Grid.Row="3"
+                                       HorizontalOptions="Center">
+                    
+                    <Entry Placeholder="First Name"
+                           WidthRequest="125"/>
+
+                    <Entry Placeholder="Last Name"/>
+
+                </HorizontalStackLayout>
+
+                <Entry Placeholder="Password" 
+                       IsPassword="True"
+                       Grid.Row="4"/>
+
+                <Entry Placeholder="Email"
+                       Grid.Row="5"/>
+
+                <Entry Placeholder="Phone" 
+                       Keyboard="Numeric"
+                       Grid.Row="6"/>
+
+                <Button x:Name="SignUpButton"
+                        Text="Sign Up"
+                        Clicked="SelectUserTypeButton"
+                        Grid.Row="9"
+                        Margin="10"/>
+
+            </Grid>
+
+        </Border>
+
+    </Grid>
+
+</ContentPage>
