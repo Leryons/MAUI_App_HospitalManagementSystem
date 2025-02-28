@@ -12,8 +12,8 @@ public class Database
             sQLite = new SQLiteConnection(dbPath);
             sQLite.CreateTable<User>();
             sQLite.CreateTable<Doctor>();
-            sQLite.CreateTable<Patient>();
             sQLite.CreateTable<Recepcionist>();
+            sQLite.CreateTable<Patient>();
         }
         catch (Exception ex)
         {
@@ -22,6 +22,16 @@ public class Database
     }
 
     public SQLiteConnection? sQLiteConnection => sQLite;
+
+    public List<Doctor> GetDoctors()
+    {
+        return sQLite.Table<Doctor>().ToList();
+    } 
+    
+    public List<Patient> GetPatients()
+    {
+        return sQLite.Table<Patient>().ToList();
+    }
 
     public Task<User?> LoginUserAsync(string name, string password)
     {
@@ -69,7 +79,7 @@ public class Database
 
     public bool RegisterRecepcionistAsync(Recepcionist recepcionist)
     {
-        var recepcionistExist = sQLite?.Table<Doctor>().Where(r => r.Name == recepcionist.Name && r.LastName == recepcionist.LastName)
+        var recepcionistExist = sQLite?.Table<Recepcionist>().Where(r => r.Name == recepcionist.Name && r.LastName == recepcionist.LastName)
                                                        .FirstOrDefault();
 
         if (recepcionistExist == null)
@@ -81,5 +91,22 @@ public class Database
         }
 
         return false;
+    } 
+    
+    public bool RegisterPatientAsync(Patient patient)
+    {
+        var patientExist = sQLite?.Table<Doctor>().Where(p => p.Name == patient.Name && p.LastName == patient.LastName)
+                                                       .FirstOrDefault();
+
+        if (patientExist == null)
+        {
+            sQLite?.Insert(patient);
+            Debug.WriteLine($"Patient {patient.Name} has been registered in the database with the access level: {patient.Rol}.");
+
+            return true;
+        }
+
+        return false;
     }
+
 }

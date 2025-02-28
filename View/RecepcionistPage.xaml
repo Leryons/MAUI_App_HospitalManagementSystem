@@ -4,7 +4,7 @@
              xmlns:model ="clr-namespace:HospitalManagementSystem.Model"
              x:Class="HospitalManagementSystem.View.RecepcionistPage"
              x:DataType="model:Recepcionist"
-             Title="{Binding Path=Name, StringFormat='Hola, {0}'}">
+             Title="{Binding Path=Name, StringFormat='Hello, {0}'}">
 
     <ContentPage.Resources>
 
@@ -33,7 +33,7 @@
     </ContentPage.Resources>
     
     
-        <Grid RowDefinitions="auto,auto,auto"
+        <Grid RowDefinitions="auto,auto"
               VerticalOptions="Center"
               HorizontalOptions="Center">
 
@@ -45,11 +45,13 @@
 
             <Border>
 
-                <ImageButton Source="doctor_icon.png"/>
+                <ImageButton x:Name="SearchInfoButton" 
+                             Source="search_logo.png"
+                             Clicked="ActionButton"/>
 
             </Border>
 
-            <Label Text="Search a Doctor"/>
+            <Label Text="Search Info"/>
 
         </VerticalStackLayout>
 
@@ -57,19 +59,9 @@
 
             <Border>
 
-                <ImageButton Source="doctor_icon.png"/>
-
-            </Border>
-
-            <Label Text="Search a Patient"/>
-
-        </VerticalStackLayout>
-
-        <VerticalStackLayout Grid.Row="2">
-
-            <Border>
-
-                <ImageButton Source="doctor_icon.png"/>
+                <ImageButton x:Name="AddPatientButton"
+                             Source="patient_logo.png"
+                             Clicked="ActionButton"/>
 
             </Border>
 

@@ -1,4 +1,6 @@
-﻿namespace HospitalManagementSystem.ViewModel;
+﻿using System.Security.Cryptography.X509Certificates;
+
+namespace HospitalManagementSystem.ViewModel;
 
 public partial class DataViewModel : ObservableObject
 {
@@ -14,14 +16,26 @@ public partial class DataViewModel : ObservableObject
     public ObservableCollection<Doctor> Doctors { get; set; } = [];
     public ObservableCollection<Patient> Patients { get; set; } = [];
 
-    public bool AccessLevelConfirmation() //Method to confirm access level
+    public void GetDoctors()
     {
-        if (CurrentUser.Rol.Equals("Doctor"))
-        {
-            return true;
-        }
+        var doctorsFromDb = database.GetDoctors();
+        Doctors.Clear();
 
-        return false;
+        foreach (var doctor in doctorsFromDb)
+        {
+            Doctors.Add(doctor);
+        }
+    }
+
+    public void GetPatients()
+    {
+        var patientsFromDb = database.GetPatients();
+        Patients.Clear();
+
+        foreach(var patient in patientsFromDb)
+        {
+            Patients.Add(patient);
+        }
     }
 
 
@@ -149,6 +163,39 @@ public partial class DataViewModel : ObservableObject
             };
 
             var confirmInsert = database.RegisterRecepcionistAsync(recepcionist);
+
+            if (confirmInsert)
+            {
+                Shell.Current.DisplayAlert("Ok", "Successfully registered", "Next");
+                Shell.Current.GoToAsync("LoginPage");
+            }
+            else
+            {
+                Shell.Current.DisplayAlert("Error", "Error, invalid user", "Accept");
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    } 
+    
+    public async Task RegisterPatientAsync()
+    {
+        try
+        {
+            Patient patient = new Patient
+            {
+                Name = _firstName,
+                LastName = _lastName,
+                Rol = _rol,
+                Phone = _phone,
+                Email = _email,
+                Password = _password,
+                MedicalRecord = _medicalRecord,
+            };
+
+            var confirmInsert = database.RegisterPatientAsync(patient);
 
             if (confirmInsert)
             {

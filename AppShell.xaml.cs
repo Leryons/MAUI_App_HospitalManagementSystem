@@ -10,6 +10,7 @@
             Routing.RegisterRoute(nameof(RecepcionistPage), typeof(RecepcionistPage));
             Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
             Routing.RegisterRoute(nameof(SignUpPage), typeof(SignUpPage));
+            Routing.RegisterRoute(nameof(AddPatientPage), typeof(AddPatientPage));
         }
     }
 }

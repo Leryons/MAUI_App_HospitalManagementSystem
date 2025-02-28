@@ -30,6 +30,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<RecepcionistPage>();
         builder.Services.AddSingleton<SignUpPage>();
         builder.Services.AddSingleton<LoginPage>();
+        builder.Services.AddSingleton<AddPatientPage>();
 
         builder.Services.AddSingleton(AudioManager.Current);
 
