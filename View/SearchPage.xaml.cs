@@ -22,13 +22,15 @@ public partial class SearchPage : ContentPage
         {
             autoComplete.ItemsSource = viewModel.Patients;
             autoComplete.Placeholder = "Search Patients";
+            autoComplete.SelectedItem = viewModel.SelectedPatient;
         }
         else if (viewModel.CurrentUser.Rol.Equals(nameof(Patient)))
         {
             autoComplete.ItemsSource = viewModel.Doctors;
             autoComplete.Placeholder = "Search Doctors";
+            autoComplete.SelectedItem = viewModel.SelectedDoctor;
         }
-        else if(viewModel.CurrentUser.Rol.Equals(nameof(Recepcionist)))
+        else if (viewModel.CurrentUser.Rol.Equals(nameof(Recepcionist)))
         {
             RecepcionistControls.IsVisible = true;
         }
@@ -36,7 +38,7 @@ public partial class SearchPage : ContentPage
 
     private void FilterAutoComplete(object sender, EventArgs eventArgs)
     {
-        if(sender == PatientSelector)
+        if (sender == PatientSelector)
         {
             autoComplete.ItemsSource = ((DataViewModel)BindingContext).Patients;
             autoComplete.Placeholder = "Search Patients";
@@ -50,9 +52,9 @@ public partial class SearchPage : ContentPage
 
             PatientSelector.InvalidateMeasure();
             DoctorSelector.InvalidateMeasure();
-        }        
-        
-        if(sender == DoctorSelector)
+        }
+
+        if (sender == DoctorSelector)
         {
             autoComplete.ItemsSource = ((DataViewModel)BindingContext).Doctors;
             autoComplete.Placeholder = "Search Doctors";
@@ -70,6 +72,6 @@ public partial class SearchPage : ContentPage
 
     private void autoComplete_SelectionChanged(object sender, Syncfusion.Maui.Inputs.SelectionChangedEventArgs e)
     {
-
+        Shell.Current.GoToAsync(nameof(UserInfoPage));
     }
 }

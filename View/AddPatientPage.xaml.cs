@@ -12,8 +12,6 @@ public partial class AddPatientPage : ContentPage
 	{
 		var viewModel = ((DataViewModel)BindingContext);
 
-		viewModel.CurrentUser.Rol = nameof(Patient);
-
 		viewModel.RegisterPatientAsync();
 	}
 }

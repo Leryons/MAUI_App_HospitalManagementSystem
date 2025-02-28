@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodel="clr-namespace:HospitalManagementSystem.ViewModel"
              x:DataType="viewmodel:DataViewModel"
-             x:Class="HospitalManagementSystem.View.AddPatientPage">
+             x:Class="HospitalManagementSystem.View.UserInfoPage">
 
     <ContentPage.Resources>
 
@@ -16,21 +16,18 @@
         <Style TargetType="Label">
             <Setter Property="FontAttributes" Value="Bold"/>
             <Setter Property="Opacity" Value="0.7"/>
-            <Setter Property="Margin" Value="0,20,0,0"/>
         </Style>
-
-        <Style TargetType="Entry">
-            <Setter Property="Margin" Value="0,0,20,0"/>
-        </Style>
+        
     </ContentPage.Resources>
-    
-    
+
+
     <ScrollView BackgroundColor="#E1E1E4"
                 HorizontalOptions="Center">
 
-        <StackLayout Margin="20,20,20,20">
+        <StackLayout Margin="20">
 
-            <Label Text="Adding Patient"
+            <Label x:Name="UserLabel"
+                   Text="User"
                    TextColor="Black"
                    FontSize="Title"
                    Opacity="0.8"
@@ -40,53 +37,69 @@
 
             <Border>
 
-                <Entry Text="{Binding FirstName}"/>
+                <Label x:Name="NameLabel"
+                       Text="{Binding SelectedPatient.Name}"/>
 
-            </Border>
-
+            </Border>   
+            
             <Label Text="Last Name"/>
+
             <Border>
 
-                <Entry Text="{Binding LastName}"/>
+                <Label x:Name="LastNameLabel"
+                       Text="{Binding SelectedPatient.LastName}"/>
 
-            </Border>
-
+            </Border>      
+            
             <Label Text="Email"/>
+
             <Border>
 
-                <Entry Text="{Binding Email}"/>
-
-            </Border>
-
-            <Label Text="Password"/>
-            <Border>
-
-                <Entry Text="{Binding Password}"/>
+                <Label  x:Name="EmailLabel"
+                        Text="{Binding SelectedPatient.Email}"/>
 
             </Border>
 
             <Label Text="Phone"/>
+
             <Border>
 
-                <Entry Text="{Binding Phone}"/>
+                <Label x:Name="PhoneLabel"
+                       Text="{Binding SelectedPatient.Phone}"/>
 
             </Border>
 
-            <Label Text="Medical Record"/>
+            <Label Text="Specialization"/>
+
             <Border>
 
-                <Entry Text="{Binding MedicalRecord}"
+                <Label x:Name="SpecializationLabel"
+                       Text="{Binding SelectedDoctor.Specialization}"/>
+
+            </Border>
+
+            <Label Text="Deparment"/>
+
+            <Border>
+
+                <Label  x:Name="DepartmentLabel"
+                        Text="{Binding SelectedDoctor.Department}"/>
+
+            </Border>         
+            
+            <Label Text="Medical Record"/>
+
+            <Border>
+
+                <Label x:Name="MedicalRecordLabel"
+                       Text="{Binding SelectedPatient.MedicalRecord}"
                        HeightRequest="150"/>
 
             </Border>
-
-            <Button Text="Add Patient"
-                    Clicked="AddPatientButton_Clicked"
-                    Command="{Binding IsPatientCommand}"
-                    Margin="20"/>
-
+            
         </StackLayout>
-        
+
     </ScrollView>
-    
+
+
 </ContentPage>

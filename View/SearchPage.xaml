@@ -22,8 +22,9 @@
                      Spacing="20">
 
             <control:SfAutocomplete x:Name="autoComplete"
-                                    DisplayMemberPath="Name"
+                                    DisplayMemberPath="LastName"
                                     TextMemberPath="Name"
+                                    SelectedItem="{Binding SelectedPatient}"
                                     SelectionChanged="autoComplete_SelectionChanged"
                                     WidthRequest="250"
                                     HeightRequest="50">

@@ -44,6 +44,12 @@ public partial class DataViewModel : ObservableObject
     [ObservableProperty]
     private User _currentUser;
 
+    [ObservableProperty]
+    private Patient _selectedPatient;
+    
+    [ObservableProperty]
+    private Doctor _selectedDoctor;
+
 
     //User prop
     [ObservableProperty]
@@ -213,6 +219,7 @@ public partial class DataViewModel : ObservableObject
         }
     }
 
+
     [RelayCommand]
     public void IsDoctor()
     {
@@ -224,6 +231,13 @@ public partial class DataViewModel : ObservableObject
     public void IsRecepcionist()
     {
         Rol = nameof(Recepcionist);
+        Debug.WriteLine(Rol);
+    }  
+    
+    [RelayCommand]
+    public void IsPatient()
+    {
+        Rol = nameof(Patient);
         Debug.WriteLine(Rol);
     }
 }
