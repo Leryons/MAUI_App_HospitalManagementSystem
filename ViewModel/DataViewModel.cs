@@ -1,54 +1,43 @@
-﻿using System.Security.Cryptography.X509Certificates;
-
-namespace HospitalManagementSystem.ViewModel;
+﻿namespace HospitalManagementSystem.ViewModel;
 
 public partial class DataViewModel : ObservableObject
 {
     private readonly Database database;
 
-    public DataViewModel() { }
     public DataViewModel(Database database)
     {
         this.database = database;
+        GetPatientsAsync();
+    }  
+    public DataViewModel()
+    {
     }
 
-    //List for Doctors and Patients
-    public ObservableCollection<Doctor> Doctors { get; set; } = [];
+    //List for Patients
     public ObservableCollection<Patient> Patients { get; set; } = [];
 
-    public void GetDoctors()
+    public async Task GetPatientsAsync() // Get Patients from Database 
     {
-        var doctorsFromDb = database.GetDoctors();
-        Doctors.Clear();
-
-        foreach (var doctor in doctorsFromDb)
-        {
-            Doctors.Add(doctor);
-        }
-    }
-
-    public void GetPatients()
-    {
-        var patientsFromDb = database.GetPatients();
+        var patientsFromDb = await database.GetPatientsAsync();
         Patients.Clear();
 
-        foreach(var patient in patientsFromDb)
+        foreach (var patient in patientsFromDb)
         {
             Patients.Add(patient);
+            Debug.WriteLine($"Showing patients in list: {patient.Name} - {patient.LastName}.");
         }
     }
 
 
-    //User ViewModel
+
+
+    //   User ViewModel  //
 
     [ObservableProperty]
     private User _currentUser;
 
     [ObservableProperty]
     private Patient _selectedPatient;
-    
-    [ObservableProperty]
-    private Doctor _selectedDoctor;
 
 
     //User prop
@@ -84,28 +73,56 @@ public partial class DataViewModel : ObservableObject
     private string _medicalRecord;
 
 
-    public async Task LoginUserAsync()
+    // Define Rol
+    [RelayCommand]
+    public void IsDoctor()
+    {
+        Rol = nameof(Doctor);
+        Debug.WriteLine($"Now {Rol}.");
+    }
+
+    [RelayCommand]
+    public void IsPatient()
+    {
+        Rol = nameof(Patient);
+        Debug.WriteLine($"Now {Rol}.");
+    }
+
+    public void SetEmptyProperty() // Clean property 
+    {
+        FirstName = String.Empty;
+        LastName = String.Empty;
+        Rol = String.Empty;
+        Phone = String.Empty;
+        Email = String.Empty;
+        Password = String.Empty;
+
+        Specialization = String.Empty;
+        Department = String.Empty;
+
+        MedicalRecord = String.Empty;
+    }
+
+    public async Task LoginUserAsync() // Login 
     {
         try
         {
-            CurrentUser = await database.LoginUserAsync(Email, Password);
+            var user = await database.LoginUserAsync(Email, Password);
 
-            if (CurrentUser != null)
+            if (user != null)
             {
-                Debug.WriteLine($"User {CurrentUser.Name} is logging up. Level Acces is {CurrentUser.Rol}.");
+                CurrentUser = user;
+
+                Debug.WriteLine($"User {CurrentUser.Name} is logging up. Level Access is {CurrentUser.Rol}.");
 
                 switch (CurrentUser.Rol)
                 {
                     case "Doctor":
-                        await Shell.Current.GoToAsync("SearchPage");
+                        await Shell.Current.GoToAsync(nameof(SearchPage));
                         break;
 
                     case "Patient":
-                        await Shell.Current.GoToAsync("SearchPage");
-                        break;
-
-                    case "Recepcionist":
-                        await Shell.Current.GoToAsync("RecepcionistPage");
+                        await Shell.Current.GoToAsync(nameof(PatientPage));
                         break;
                 }
             }
@@ -116,128 +133,46 @@ public partial class DataViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            Debug.WriteLine(ex);
+            Debug.WriteLine($"{ex} in LoginUserAsync() method.");
         }
     }
 
-    public async Task RegisterDoctorAsync()
+    public async Task RegisterUserAsync() // Register User 
     {
         try
         {
-            Doctor doctor = new Doctor
-            {
-                Name = _firstName,
-                LastName = _lastName,
-                Rol = _rol,
-                Phone = _phone,
-                Email = _email,
-                Password = _password,
-                Specialization = _specialization,
-                Department = _department,
-            };
+            var insertToDb = false;
 
-            var confirmInsert = database.RegisterDoctorAsync(doctor);
-
-            if (confirmInsert)
+            if (Rol.Equals(nameof(Doctor)))
             {
-                Shell.Current.DisplayAlert("Ok", "Successfully registered", "Next");
-                Shell.Current.GoToAsync("LoginPage");
+                Doctor doctor = new(Specialization, Department, Rol, FirstName, LastName, Password, Email, Phone);
+
+                insertToDb = await database.RegisterDoctorAsync(doctor);
+
+            }
+
+            else if (Rol.Equals(nameof(Patient)))
+            {
+                Patient patient = new(MedicalRecord, Rol, FirstName, LastName, Password, Email, Phone);
+
+                insertToDb = await database.RegisterPatientAsync(patient);
+            }
+
+            if (insertToDb)
+            {
+                await Shell.Current.DisplayAlert("", "Sign up sucessfully", "", "Next");
+
+                await Shell.Current.GoToAsync(nameof(LoginPage));
             }
             else
             {
-                Shell.Current.DisplayAlert("Error", "Error, invalid user", "Accept");
+                await Shell.Current.DisplayAlert("Error", "Invalid User", "Ok");
+
             }
         }
         catch (Exception ex)
         {
-            Debug.WriteLine(ex);
+            Debug.WriteLine($"{ex} in RegisterUserAsync() method");
         }
-    }
-
-    public async Task RegisterRecepcionistAsync()
-    {
-        try
-        {
-            Recepcionist recepcionist = new Recepcionist
-            {
-                Name = _firstName,
-                LastName = _lastName,
-                Rol = _rol,
-                Phone = _phone,
-                Email = _email,
-                Password = _password
-            };
-
-            var confirmInsert = database.RegisterRecepcionistAsync(recepcionist);
-
-            if (confirmInsert)
-            {
-                Shell.Current.DisplayAlert("Ok", "Successfully registered", "Next");
-                Shell.Current.GoToAsync("LoginPage");
-            }
-            else
-            {
-                Shell.Current.DisplayAlert("Error", "Error, invalid user", "Accept");
-            }
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine(ex);
-        }
-    } 
-    
-    public async Task RegisterPatientAsync()
-    {
-        try
-        {
-            Patient patient = new Patient
-            {
-                Name = _firstName,
-                LastName = _lastName,
-                Rol = _rol,
-                Phone = _phone,
-                Email = _email,
-                Password = _password,
-                MedicalRecord = _medicalRecord,
-            };
-
-            var confirmInsert = database.RegisterPatientAsync(patient);
-
-            if (confirmInsert)
-            {
-                Shell.Current.DisplayAlert("Ok", "Successfully registered", "Next");
-                Shell.Current.GoToAsync("LoginPage");
-            }
-            else
-            {
-                Shell.Current.DisplayAlert("Error", "Error, invalid user", "Accept");
-            }
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine(ex);
-        }
-    }
-
-
-    [RelayCommand]
-    public void IsDoctor()
-    {
-        Rol = nameof(Doctor);
-        Debug.WriteLine(Rol);
-    }
-
-    [RelayCommand]
-    public void IsRecepcionist()
-    {
-        Rol = nameof(Recepcionist);
-        Debug.WriteLine(Rol);
-    }  
-    
-    [RelayCommand]
-    public void IsPatient()
-    {
-        Rol = nameof(Patient);
-        Debug.WriteLine(Rol);
     }
 }

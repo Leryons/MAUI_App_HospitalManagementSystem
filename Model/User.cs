@@ -12,4 +12,16 @@ public class User
     public string Email { get; set; } = string.Empty;
     public string Phone { get; set; } = string.Empty;
 
+    public User(string rol, string name, string lastName, string password, string email, string phone)
+    {
+        Rol = rol;
+        Name = name;
+        LastName = lastName;
+        Password = password;
+        Email = email;
+        Phone = phone;
+    }
+
+    public User()
+    { }
 }

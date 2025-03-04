@@ -2,73 +2,69 @@
 
 public class Database
 {
-    private readonly SQLiteConnection? sQLite;
+    private readonly SQLiteAsyncConnection sQLite;
 
     public Database()
     {
         try
-        {
+        {      
             var dbPath = Path.Combine(FileSystem.AppDataDirectory, "UmbrellaCorp.db");
-            sQLite = new SQLiteConnection(dbPath);
-            sQLite.CreateTable<User>();
-            sQLite.CreateTable<Doctor>();
-            sQLite.CreateTable<Recepcionist>();
-            sQLite.CreateTable<Patient>();
+            sQLite = new SQLiteAsyncConnection(dbPath);
+            sQLite.CreateTableAsync<User>().Wait();
+            sQLite.CreateTableAsync<Doctor>().Wait();
+            sQLite.CreateTableAsync<Patient>().Wait();
         }
         catch (Exception ex)
         {
             Debug.WriteLine(ex.Message);
         }
-    }
 
-    public SQLiteConnection? sQLiteConnection => sQLite;
-
-    public List<Doctor> GetDoctors()
-    {
-        return sQLite.Table<Doctor>().ToList();
-    } 
-    
-    public List<Patient> GetPatients()
-    {
-        return sQLite.Table<Patient>().ToList();
-    }
-
-    public Task<User?> LoginUserAsync(string name, string password)
-    {
-        return Task.Run(() =>
+        if (sQLite == null)
         {
-            var patient = sQLite?.Table<Patient>().Where(p => p.Email == name && p.Password == password)
-                                                  .FirstOrDefault();
-
-            if (patient != null)
-                return (User?)patient;
-
-            var recepcionist = sQLite?.Table<Recepcionist>().Where(r => r.Email == name && r.Password == password)
-                                                            .FirstOrDefault();
-
-            if (recepcionist != null)
-                return (User?)recepcionist;
-
-            var doctor = sQLite?.Table<Doctor>().Where(d => d.Email == name && d.Password == password)
-                                                .FirstOrDefault();
-
-            if (doctor != null)
-                return (User?)doctor;
-
-            return (User?)null;
-        });
+            throw new InvalidOperationException("SQLite connection is not initialized.");
+        }
     }
 
-    public bool RegisterDoctorAsync(Doctor doctor)
+    public SQLiteAsyncConnection? sQLiteAsyncConnection => sQLite;
+
+    public async Task<List<Doctor>> GetDoctorsAsync() // Fill up Doctors List 
     {
-        var doctorExist = sQLite?.Table<Doctor>().Where(d => d.Name == doctor.Name && d.LastName == doctor.LastName)
-                                                 .FirstOrDefault();
+        return await sQLite.Table<Doctor>().ToListAsync();
+    }
 
+    public async Task<List<Patient>> GetPatientsAsync() //Fill up Patients List 
+    {
+        return await sQLite.Table<Patient>().ToListAsync();
+    }
 
+    public async Task<User?> LoginUserAsync(string name, string password) // Login 
+    {
+        var patient = await sQLite.Table<Patient>().Where(p => p.Email == name && p.Password == password)
+                                                    .FirstOrDefaultAsync();
+
+        if (patient != null)
+            return patient;
+
+        var doctor = await sQLite.Table<Doctor>().Where(d => d.Email == name && d.Password == password)
+                                                  .FirstOrDefaultAsync();
+
+        if (doctor != null)
+            return doctor;
+
+        return null;
+    }
+
+    public async Task<bool> RegisterDoctorAsync(Doctor doctor) // Insert Doctor 
+    {
+        var doctorExist = await sQLite.Table<Doctor>().Where(d => d.Name == doctor.Name && d.LastName == doctor.LastName)
+                                                       .FirstOrDefaultAsync();
+
+        
 
         if (doctorExist == null)
-        {
-            sQLite?.Insert(doctor);
+        { 
+            await sQLite.InsertAsync(doctor);
+
             Debug.WriteLine($"Doctor {doctor.Name} has been registered in the database with the access level: {doctor.Rol}.");
 
             return true;
@@ -77,30 +73,15 @@ public class Database
         return false;
     }
 
-    public bool RegisterRecepcionistAsync(Recepcionist recepcionist)
+    public async Task<bool> RegisterPatientAsync(Patient patient) // Insert Patient 
     {
-        var recepcionistExist = sQLite?.Table<Recepcionist>().Where(r => r.Name == recepcionist.Name && r.LastName == recepcionist.LastName)
-                                                       .FirstOrDefault();
-
-        if (recepcionistExist == null)
-        {
-            sQLite?.Insert(recepcionist);
-            Debug.WriteLine($"Recepcionist {recepcionist.Name} has been registered in the database with the access level: {recepcionist.Rol}.");
-
-            return true;
-        }
-
-        return false;
-    } 
-    
-    public bool RegisterPatientAsync(Patient patient)
-    {
-        var patientExist = sQLite?.Table<Doctor>().Where(p => p.Name == patient.Name && p.LastName == patient.LastName)
-                                                       .FirstOrDefault();
+        var patientExist = await sQLite.Table<Doctor>().Where(p => p.Name == patient.Name && p.LastName == patient.LastName)
+                                                       .FirstOrDefaultAsync();
 
         if (patientExist == null)
         {
-            sQLite?.Insert(patient);
+            await sQLite.InsertAsync(patient);
+
             Debug.WriteLine($"Patient {patient.Name} has been registered in the database with the access level: {patient.Rol}.");
 
             return true;

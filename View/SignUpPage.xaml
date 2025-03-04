@@ -59,8 +59,8 @@
                            Grid.Column="0"
                            Padding="10"/>
 
-                    <Label x:Name="RecepcionistSelectorLabel"
-                           Text="Recepcionist"
+                    <Label x:Name="PatientSelectorLabel"
+                           Text="Patient"
                            TextColor="Black"
                            FontSize="15"
                            HorizontalTextAlignment="Center"
@@ -86,7 +86,7 @@
                             
                         </RoundRectangle>
 
-                        <RoundRectangle x:Name="RecepcionistSelector" 
+                        <RoundRectangle x:Name="PatientSelector" 
                                         CornerRadius="0,0,0,80"
                                         Stroke="#E31E25"
                                         BackgroundColor="Transparent"
@@ -95,7 +95,7 @@
                             
                             <RoundRectangle.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="SelectUserTypeButton"
-                                                      Command="{Binding IsRecepcionistCommand}"/>
+                                                      Command="{Binding IsPatientCommand}"/>
                             </RoundRectangle.GestureRecognizers>
                             
                         </RoundRectangle>

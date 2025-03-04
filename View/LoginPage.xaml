@@ -51,11 +51,11 @@
 
                     <Button x:Name="LoginButton"
                             Text="Login"
-                            Clicked="SectionButton_Clicked"/>
+                            Clicked="AccountButton_Clicked"/>
 
                     <Button x:Name="SignUpButton"
                             Text="SignUp"
-                            Clicked="SectionButton_Clicked"/>
+                            Clicked="AccountButton_Clicked"/>
 
                 </HorizontalStackLayout>
 

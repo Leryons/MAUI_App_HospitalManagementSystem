@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:control="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"   
+             xmlns:control="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
              xmlns:model="clr-namespace:HospitalManagementSystem.Model"
              xmlns:viewmodel="clr-namespace:HospitalManagementSystem.ViewModel"
              x:DataType="viewmodel:DataViewModel"
              x:Class="HospitalManagementSystem.View.SearchPage">
 
     <Grid RowDefinitions="*,*,*,*">
-        
+
         <Image Source="umbrella_logo.png"
                Opacity="0.3"
                WidthRequest="200"
@@ -22,74 +22,22 @@
                      Spacing="20">
 
             <control:SfAutocomplete x:Name="autoComplete"
-                                    DisplayMemberPath="LastName"
+                                    ItemsSource="{Binding Patients}"
+                                    Placeholder="Search a Patient"
+                                    DisplayMemberPath="Name"
                                     TextMemberPath="Name"
                                     SelectedItem="{Binding SelectedPatient}"
-                                    SelectionChanged="autoComplete_SelectionChanged"
+                                    SelectionChanged="AutoComplete_SelectionChanged"
                                     WidthRequest="250"
                                     HeightRequest="50">
             </control:SfAutocomplete>
 
-
-            <Grid x:Name="RecepcionistControls"
-                  ColumnDefinitions="*,*"
-                  HorizontalOptions="Center">
-
-                <Label x:Name="DoctorSelectorLabel"
-                       Text="Doctors"
-                       TextColor="Black"
-                       FontSize="15"
-                       HorizontalTextAlignment="Center"
-                       Grid.Column="0"/>
-
-                <Label x:Name="PatientSelectorLabel"
-                       Text="Patients"
-                       TextColor="Black"
-                       FontSize="15"
-                       HorizontalTextAlignment="Center"
-                       Grid.Column="1"/>
-
-                <HorizontalStackLayout Grid.Column="0"
-                                       Grid.ColumnSpan="2"
-                                       HorizontalOptions="Center"
-                                       ZIndex="-1">
-
-                    <RoundRectangle x:Name="DoctorSelector"
-                                    CornerRadius="0,0,80,0"
-                                    BackgroundColor="Transparent"
-                                    Stroke="#E31E25"
-                                    HeightRequest="25"
-                                    WidthRequest="120">
-
-                        <RoundRectangle.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="FilterAutoComplete"/>
-                        </RoundRectangle.GestureRecognizers>
-
-                    </RoundRectangle>
-
-                    <RoundRectangle x:Name="PatientSelector" 
-                                    CornerRadius="0,80,0,0"
-                                    Stroke="#E31E25"
-                                    BackgroundColor="Transparent"
-                                    HeightRequest="25"
-                                    WidthRequest="120">
-
-                        <RoundRectangle.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="FilterAutoComplete"/>
-                        </RoundRectangle.GestureRecognizers>
-
-                    </RoundRectangle>
-
-                </HorizontalStackLayout>
-
-            </Grid>
-            
         </StackLayout>
 
     </Grid>
 
-     <ContentPage.BindingContext>
+    <ContentPage.BindingContext>
         <viewmodel:DataViewModel></viewmodel:DataViewModel>
     </ContentPage.BindingContext>
-    
+
 </ContentPage>

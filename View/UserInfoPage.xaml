@@ -20,13 +20,12 @@
         
     </ContentPage.Resources>
 
-
     <ScrollView BackgroundColor="#E1E1E4"
                 HorizontalOptions="Center">
 
         <StackLayout Margin="20">
 
-            <Label x:Name="UserLabel"
+            <Label x:Name="Patient"
                    Text="User"
                    TextColor="Black"
                    FontSize="Title"
@@ -37,8 +36,7 @@
 
             <Border>
 
-                <Label x:Name="NameLabel"
-                       Text="{Binding SelectedPatient.Name}"/>
+                <Label Text="{Binding SelectedPatient.Name}"/>
 
             </Border>   
             
@@ -46,8 +44,7 @@
 
             <Border>
 
-                <Label x:Name="LastNameLabel"
-                       Text="{Binding SelectedPatient.LastName}"/>
+                <Label Text="{Binding SelectedPatient.LastName}"/>
 
             </Border>      
             
@@ -55,8 +52,7 @@
 
             <Border>
 
-                <Label  x:Name="EmailLabel"
-                        Text="{Binding SelectedPatient.Email}"/>
+                <Label Text="{Binding SelectedPatient.Email}"/>
 
             </Border>
 
@@ -64,35 +60,15 @@
 
             <Border>
 
-                <Label x:Name="PhoneLabel"
-                       Text="{Binding SelectedPatient.Phone}"/>
+                <Label Text="{Binding SelectedPatient.Phone}"/>
 
             </Border>
-
-            <Label Text="Specialization"/>
-
-            <Border>
-
-                <Label x:Name="SpecializationLabel"
-                       Text="{Binding SelectedDoctor.Specialization}"/>
-
-            </Border>
-
-            <Label Text="Deparment"/>
-
-            <Border>
-
-                <Label  x:Name="DepartmentLabel"
-                        Text="{Binding SelectedDoctor.Department}"/>
-
-            </Border>         
-            
+                 
             <Label Text="Medical Record"/>
 
             <Border>
 
-                <Label x:Name="MedicalRecordLabel"
-                       Text="{Binding SelectedPatient.MedicalRecord}"
+                <Label Text="{Binding SelectedPatient.MedicalRecord}"
                        HeightRequest="150"/>
 
             </Border>
@@ -100,6 +76,5 @@
         </StackLayout>
 
     </ScrollView>
-
 
 </ContentPage>

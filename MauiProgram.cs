@@ -17,7 +17,9 @@ public static class MauiProgram
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
-        //Dependecy Injection
+
+
+        //Dependecy Injection //
 
         //ViewModel
         builder.Services.AddSingleton<DataViewModel>();
@@ -27,12 +29,12 @@ public static class MauiProgram
 
         //View
         builder.Services.AddSingleton<SearchPage>();
-        builder.Services.AddSingleton<RecepcionistPage>();
         builder.Services.AddSingleton<SignUpPage>();
         builder.Services.AddSingleton<LoginPage>();
-        builder.Services.AddSingleton<AddPatientPage>();
         builder.Services.AddSingleton<UserInfoPage>();
+        builder.Services.AddSingleton<PatientPage>();
 
+        //Tool
         builder.Services.AddSingleton(AudioManager.Current);
 
 

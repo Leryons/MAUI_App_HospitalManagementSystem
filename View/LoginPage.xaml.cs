@@ -10,11 +10,12 @@ public partial class LoginPage : ContentPage
         this.BindingContext = viewModel;
     }
 
-    private async void PlayMusic(object sender, EventArgs e)
+    private async void PlayMusic(object sender, EventArgs e) //Play EasterEgg music 
     {
+        // Play "El Forastero" // This is a EasterEgg // Just for fun
         var player = audioManager.CreatePlayer(await FileSystem.OpenAppPackageFileAsync("forastero_re4.mp3"));
 
-        await Task.Delay(1000);
+        await Task.Delay(800);
 
         player.Play();
 
@@ -23,33 +24,27 @@ public partial class LoginPage : ContentPage
         player.Dispose();
     }
 
-    private async void SectionButton_Clicked(object sender, EventArgs e)
+    private async void AccountButton_Clicked(object sender, EventArgs e) // Handle two options to get account  
     {
-
-        if (sender == SignUpButton)
+        try
         {
-            await Shell.Current.GoToAsync("SignUpPage");
+            var dataViewModel = ((DataViewModel)BindingContext);
 
-            return;
+            // Go to Sign Up Page
+            if (sender == SignUpButton)
+            {
+                await Shell.Current.GoToAsync(nameof(SignUpPage));
+            }
+
+            // Inicialization of LoginUserAsync() method
+            if (sender == LoginButton)
+            {
+                await dataViewModel.LoginUserAsync();
+            }
         }
-
-        var dataViewModel = ((DataViewModel)BindingContext);
-
-        await dataViewModel.LoginUserAsync();
-
-        await Task.Delay(1000);
-
-        if (sender == LoginButton)
+        catch (Exception ex)
         {
-            if (dataViewModel.CurrentUser.Rol.Equals("Doctor") || dataViewModel.CurrentUser.Rol.Equals("Patient"))
-            {
-                await Shell.Current.GoToAsync("SearchPage");
-            }
-
-            if (dataViewModel.CurrentUser.Rol.Equals("Recepcionist"))
-            {
-                await Shell.Current.GoToAsync("RecepcionistPage");
-            }
+            Debug.WriteLine($"Exception in {ex}");
         }
     }
 }

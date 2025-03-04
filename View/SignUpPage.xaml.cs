@@ -8,6 +8,7 @@ public partial class SignUpPage : ContentPage
         this.BindingContext = viewModel;
     }
 
+    // Add new Entry for Doctor Rol //
     Entry Specialization = new()
     {
         Placeholder = "Specialization"
@@ -18,69 +19,63 @@ public partial class SignUpPage : ContentPage
         Placeholder = "Department"
     };
 
-    private void SelectUserTypeButton(object sender, EventArgs e)
+    private void SelectUserTypeButton(object sender, EventArgs e) // Style the user type selector 
     {
-        MainThread.BeginInvokeOnMainThread(async () =>
+        if (sender == DoctorSelector)
         {
-            if (sender == DoctorSelector)
-            {
-                DoctorSelector.BackgroundColor = Color.FromRgb(227, 30, 37);
-                RecepcionistSelector.BackgroundColor = Color.FromRgb(255, 255, 255);
+            DoctorSelector.BackgroundColor = Color.FromRgb(227, 30, 37);
+            PatientSelector.BackgroundColor = Color.FromRgb(255, 255, 255);
 
-                DoctorSelectorLabel.TextColor = Color.FromRgb(255, 255, 255);
-                RecepcionistSelectorLabel.TextColor = Color.FromRgb(0, 0, 0);
+            DoctorSelectorLabel.TextColor = Color.FromRgb(255, 255, 255);
+            PatientSelectorLabel.TextColor = Color.FromRgb(0, 0, 0);
 
-                DoctorSelector.InvalidateMeasure();
-                RecepcionistSelector.InvalidateMeasure();
+            DoctorSelector.InvalidateMeasure();
+            PatientSelector.InvalidateMeasure();
 
-                Grid.SetRow(Specialization, 7);
-                Grid.SetRow(Department, 8);
+            Grid.SetRow(Specialization, 7);
+            Grid.SetRow(Department, 8);
 
-                SignUpGrid.Children.Add(Specialization);
-                SignUpGrid.Children.Add(Department);
-            }
+            SignUpGrid.Children.Add(Specialization);
+            SignUpGrid.Children.Add(Department);
+        }
 
-            if (sender == RecepcionistSelector)
-            {
-                RecepcionistSelector.BackgroundColor = Color.FromRgb(227, 30, 37);
-                DoctorSelector.BackgroundColor = Color.FromRgb(255, 255, 255);
+        if (sender == PatientSelector)
+        {
+            PatientSelector.BackgroundColor = Color.FromRgb(227, 30, 37);
+            DoctorSelector.BackgroundColor = Color.FromRgb(255, 255, 255);
 
 
-                RecepcionistSelectorLabel.TextColor = Color.FromRgb(255, 255, 255);
-                DoctorSelectorLabel.TextColor = Color.FromRgb(0, 0, 0);
+            PatientSelectorLabel.TextColor = Color.FromRgb(255, 255, 255);
+            DoctorSelectorLabel.TextColor = Color.FromRgb(0, 0, 0);
 
-                RecepcionistSelector.InvalidateMeasure();
-                DoctorSelector.InvalidateMeasure();
+            PatientSelector.InvalidateMeasure();
+            DoctorSelector.InvalidateMeasure();
 
-                SignUpGrid.Children.Remove(Specialization);
-                SignUpGrid.Children.Remove(Department);
+            SignUpGrid.Children.Remove(Specialization);
+            SignUpGrid.Children.Remove(Department);
 
-            }
-
-
-        });
+        }
     }
 
-    private void SignUpButton_Clicked(object sender, EventArgs e)
+    private async void SignUpButton_Clicked(object sender, EventArgs e) // When SignUpButton is pressed this method handle the actions 
     {
+        var dataViewModel = ((DataViewModel)BindingContext);
 
-        var user = ((DataViewModel)BindingContext);
-
-        if (user.Rol.Equals(nameof(Doctor)))
+        if (dataViewModel.Rol.Equals(nameof(Doctor)))
         {
-            Debug.WriteLine("DoctorSelector Has been pressed and try to sign");
+            Debug.WriteLine("DoctorSelector has been pressed and try to sign");
 
             Specialization.SetBinding(Entry.TextProperty, "Specialization");
             Department.SetBinding(Entry.TextProperty, "Department");
 
-            ((DataViewModel)BindingContext).RegisterDoctorAsync();
-        }
+            await dataViewModel.RegisterUserAsync();
+        } 
 
-        if (user.Rol.Equals(nameof(Recepcionist)))
+        if (dataViewModel.Rol.Equals(nameof(Patient)))
         {
-            Debug.WriteLine("RecepcionistSelector Has been pressed and try to sign");
+            Debug.WriteLine("PatientSelector has been pressed and try to sign");
 
-            ((DataViewModel)BindingContext).RegisterRecepcionistAsync();
+            await dataViewModel.RegisterUserAsync();
         }
     }
 }
