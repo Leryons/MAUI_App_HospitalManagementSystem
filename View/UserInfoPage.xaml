@@ -26,10 +26,11 @@
         <StackLayout Margin="20">
 
             <Label x:Name="Patient"
-                   Text="User"
+                   Text="Patient"
                    TextColor="Black"
                    FontSize="Title"
                    Opacity="0.8"
+                   Margin="0,0,0,20"
                    HorizontalTextAlignment="Center"/>
 
             <Label Text="First Name"/>
@@ -63,16 +64,28 @@
                 <Label Text="{Binding SelectedPatient.Phone}"/>
 
             </Border>
-                 
-            <Label Text="Medical Record"/>
 
-            <Border>
+            <HorizontalStackLayout Margin="0,15,0,0"
+                                   Spacing="5">
 
-                <Label Text="{Binding SelectedPatient.MedicalRecord}"
-                       HeightRequest="150"/>
+                <Border HeightRequest="45">
 
-            </Border>
-            
+                    <Entry Placeholder="Medical Diagnosis"
+                       Text="{Binding SelectedPatient.Diagnosis}"/>
+
+                </Border>
+                
+                <Button Text="Send"
+                        Command="{Binding AddMedicalDiagnosisCommand}"/>
+
+            </HorizontalStackLayout>
+
+            <Button Text="Download PDF" 
+                    Command="{Binding DownloadPdfCommand}"
+                    WidthRequest="150"
+                    Margin="40"/>
+
+
         </StackLayout>
 
     </ScrollView>

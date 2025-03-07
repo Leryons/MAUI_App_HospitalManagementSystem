@@ -10,6 +10,7 @@ global using CommunityToolkit.Mvvm.Input;
 global using SQLite;
 global using Plugin.Maui.Audio;
 global using Syncfusion.Maui.Core.Hosting;
+global using CommunityToolkit.Maui;
 
 //System
 global using System.Collections.ObjectModel;

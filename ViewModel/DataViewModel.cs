@@ -1,4 +1,6 @@
-﻿namespace HospitalManagementSystem.ViewModel;
+﻿using CommunityToolkit.Maui.Storage;
+
+namespace HospitalManagementSystem.ViewModel;
 
 public partial class DataViewModel : ObservableObject
 {
@@ -37,7 +39,13 @@ public partial class DataViewModel : ObservableObject
     private User _currentUser;
 
     [ObservableProperty]
+    private Patient _currentPatient;
+
+    [ObservableProperty]
     private Patient _selectedPatient;
+
+    [ObservableProperty]
+    private bool _isPdfUploaded = false;
 
 
     //User prop
@@ -122,6 +130,7 @@ public partial class DataViewModel : ObservableObject
                         break;
 
                     case "Patient":
+                        CurrentPatient = (Patient)user;
                         await Shell.Current.GoToAsync(nameof(PatientPage));
                         break;
                 }
@@ -153,7 +162,7 @@ public partial class DataViewModel : ObservableObject
 
             else if (Rol.Equals(nameof(Patient)))
             {
-                Patient patient = new(MedicalRecord, Rol, FirstName, LastName, Password, Email, Phone);
+                Patient patient = new(null,null, Rol, FirstName, LastName, Password, Email, Phone);
 
                 insertToDb = await database.RegisterPatientAsync(patient);
             }
@@ -173,6 +182,99 @@ public partial class DataViewModel : ObservableObject
         catch (Exception ex)
         {
             Debug.WriteLine($"{ex} in RegisterUserAsync() method");
+        }
+    }
+
+
+    // Quick way, I have to remake all of these //
+    [RelayCommand]
+    public async Task AddMedicalDiagnosis() // Insert Medical Diagnosis 
+    {
+        try
+        {
+            var patient = await database.GetPatientbyNameAsync(SelectedPatient.Name, SelectedPatient.LastName);
+
+            if (patient != null)
+            {
+                patient.Diagnosis = SelectedPatient.Diagnosis;
+
+                await database.PatientDiagnosisAsync(patient);
+                await Shell.Current.DisplayAlert("", "Diagnosis added successfully", "Ok");
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception in AddMedicalSymptoms() method: {ex}");
+            await Shell.Current.DisplayAlert("Error", $"Failed to add Diagnosis: {ex.Message}", "Ok");
+        }
+    }
+
+
+    //   PDF Upload/Download  //
+    [RelayCommand]
+    private async Task UploadPdfAsync()
+    {
+        var PdfContent = await PickAndReadPdfAsync();
+        if (PdfContent != null)
+        {
+            await database.UpdatePatientAsync(CurrentUser.Name, PdfContent);
+
+            await Shell.Current.DisplayAlert("", "PDF uploaded successfully", "Ok");
+
+            IsPdfUploaded = true;
+        }
+    }
+
+    private async Task<byte[]> PickAndReadPdfAsync()
+    {
+        try
+        {
+            var result = await FilePicker.PickAsync(new PickOptions
+            {
+                PickerTitle = "Pick a PDF file",
+                FileTypes = FilePickerFileType.Pdf,
+            });
+
+            if (result != null)
+            {
+                Debug.WriteLine($"File Name: {result.FileName}");
+
+                using (var stream = await result.OpenReadAsync())
+                using (var memoryStream = new MemoryStream())
+                {
+                    await stream.CopyToAsync(memoryStream);
+                    return memoryStream.ToArray();
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception in PickAndReadPdfAsync() method: {ex}");
+            await Shell.Current.DisplayAlert("Error", $"Failed to read PDF: {ex.Message}", "Ok");
+        }
+
+        return null;
+    }
+
+    [RelayCommand]
+    private async Task DownloadPdfAsync() // Download PDF
+    {
+        try
+        {
+            var patientPdf = await database.GetPatientbyNameAsync(SelectedPatient.Name, SelectedPatient.LastName);
+
+            if (patientPdf != null)
+            {
+                using var stream = new MemoryStream(patientPdf.Pdf);
+                var path = FileSaver.SaveAsync($"{patientPdf.Name}.pdf", stream, default);
+
+                await Shell.Current.DisplayAlert("", "PDF downloaded successfully", "Ok");
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception in DownloadPdfAsync() method: {ex}");
+            await Shell.Current.DisplayAlert("Error", $"Failed to download PDF: {ex.Message}", "Ok");
         }
     }
 }

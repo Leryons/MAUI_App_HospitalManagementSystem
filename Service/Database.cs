@@ -89,4 +89,44 @@ public class Database
 
         return false;
     }
+
+    public async Task<bool> UpdatePatientAsync(string firstName, byte[] pdfContent) //Insert PDF to Patient
+    {
+        var patient = await sQLite.Table<Patient>().Where(p => p.Name == firstName)
+                                                       .FirstOrDefaultAsync();
+
+        if (patient != null)
+        {
+            patient.Pdf = pdfContent;
+            await sQLite.UpdateAsync(patient);
+            Debug.WriteLine($"Patient {patient.Name} has been updated in the database.");
+            return true;
+        }
+
+        return false;
+    }
+
+    public async Task<bool> PatientDiagnosisAsync(Patient patient)
+    {
+        var patientExist = await sQLite.Table<Patient>().Where(p => p.Name == patient.Name)
+                                                        .FirstOrDefaultAsync();
+
+        if (patientExist != null)
+        {
+            patientExist.Diagnosis = patient.Diagnosis;
+
+            await sQLite.UpdateAsync(patientExist);
+
+            Debug.WriteLine($"Diagnosis of the Patient {patient.Name} has been inserted in the database.");
+            return true;
+        }
+
+        return false;
+    }
+
+    public async Task<Patient> GetPatientbyNameAsync(string firstName, string lastName)
+    {
+        return await sQLite.Table<Patient>().Where(p => p.Name == firstName && p.LastName == lastName)
+                                      .FirstOrDefaultAsync();
+    }
 }

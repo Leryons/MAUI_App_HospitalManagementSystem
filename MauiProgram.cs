@@ -1,4 +1,6 @@
-﻿namespace HospitalManagementSystem;
+﻿using CommunityToolkit.Maui.Storage;
+
+namespace HospitalManagementSystem;
 
 public static class MauiProgram
 {
@@ -7,6 +9,7 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
+            .UseMauiCommunityToolkit()
             .ConfigureSyncfusionCore()
             .ConfigureFonts(fonts =>
             {
@@ -36,6 +39,7 @@ public static class MauiProgram
 
         //Tool
         builder.Services.AddSingleton(AudioManager.Current);
+        builder.Services.AddSingleton<IFileSaver>(FileSaver.Default);
 
 
         return builder.Build();
